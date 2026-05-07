@@ -19,7 +19,7 @@ import {
   ShoppingCart as CartIcon,
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import { Cart, CartItem } from '../types';
+import { Cart } from '../types';
 import { cartService } from '../services/api';
 
 const CartPage: React.FC = () => {
@@ -142,6 +142,8 @@ const CartPage: React.FC = () => {
                   Items ({cart.items.length})
                 </Typography>
                 <Button
+                  variant="outlined"
+                  startIcon={<DeleteIcon />}
                   color="error"
                   onClick={clearCart}
                   disabled={cart.items.length === 0}
@@ -198,12 +200,14 @@ const CartPage: React.FC = () => {
                           <AddIcon />
                         </IconButton>
                       </Box>
-                      <IconButton
+                      <Button
+                        size="small"
                         color="error"
+                        startIcon={<DeleteIcon />}
                         onClick={() => removeItem(item.id)}
                       >
-                        <DeleteIcon />
-                      </IconButton>
+                        Remove
+                      </Button>
                       <Typography variant="body2" fontWeight="bold">
                         ${(item.foodItem.price * item.quantity).toFixed(2)}
                       </Typography>
