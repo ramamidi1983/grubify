@@ -119,7 +119,7 @@ print(f"Status: {response.status_code}")  # Expect 202 Accepted
 
 Wait ~30 seconds after receiving HTTP 202 before verifying.
 
-### Option C: Update replicas (workaround — only works if app is NOT in Stopped state)
+### Option C: Update replicas (reliable workaround)
 
 ```bash
 az containerapp update \
@@ -129,7 +129,7 @@ az containerapp update \
   --min-replicas 1 --max-replicas 3
 ```
 
-> **Warning:** This does NOT start a stopped app — it only updates scaling config. Use Option A or B for stopped apps.
+> **Note:** Despite earlier assumptions, this command **does** successfully restart a stopped app. The update implicitly starts the app when it needs to provision replicas. Confirmed during incident [#19](https://github.com/ramamidi1983/grubify/issues/19) on 2026-05-28. This is the simplest remediation path when `az containerapp start` is unavailable.
 
 ---
 
@@ -221,3 +221,4 @@ Check if KEDA scalers restarted and replicas are actually provisioned:
 |------|-------|------------|----------|
 | 2026-05-27 ~18:12 | [#16](https://github.com/ramamidi1983/grubify/issues/16) | Revision transition without rolling update | ~10 min |
 | 2026-05-27 ~21:28 | [#18](https://github.com/ramamidi1983/grubify/issues/18) | Manual admin stop + cost policy block | ~16 hours |
+| 2026-05-27 ~21:28 | [#19](https://github.com/ramamidi1983/grubify/issues/19) | Manual admin stop (no cost block) — remediated via `az containerapp update` | ~17.8 hours |
